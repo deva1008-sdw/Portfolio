@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeTracker - Technical Case Study</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(99, 102, 241, 0.2);
+            --primary: #4f46e5;
+            --accent: #10b981;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            padding: 40px 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(79, 70, 229, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header Styling */
+        header {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .meta-tags {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(79, 70, 229, 0.1);
+            border: 1px solid rgba(79, 70, 229, 0.3);
+            color: #818cf8;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .tag.budget {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 30%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .role-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 14px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Main Sections */
+        section {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+            color: white;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+
+        /* Technical Grid */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .tech-item strong {
+            display: block;
+            color: white;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .tech-item span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Diagram Mock */
+        .diagram-container {
+            background: #080b12;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+
+        /* Features List */
+        .feature-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .feature-card {
+            border-left: 3px solid var(--accent);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .feature-card h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Code Block */
+        pre {
+            background: #05070c;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 20px 0;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #c9d1d9;
+        }
+
+        /* Print Settings (Optimized for PDF exports) */
+        @media print {
+            body {
+                background: white;
+                color: #1f2937;
+                padding: 0;
+            }
+            .container {
+                max-width: 100%;
+            }
+            header, section {
+                background: white;
+                border: 1px solid #e5e7eb;
+                box-shadow: none;
+                page-break-inside: avoid;
+                color: #1f2937;
+            }
+            h1, h2, h3, .tech-item strong, .feature-card h3 {
+                color: #111827 !important;
+            }
+            header::before {
+                background: #4f46e5;
+            }
+            p, .tech-item span, .feature-card p, .role-text {
+                color: #4b5563 !important;
+            }
+            .actions {
+                display: none;
+            }
+            .tag {
+                background: #f3f4f6;
+                border-color: #d1d5db;
+                color: #374151;
+            }
+            .diagram-container, pre {
+                border-color: #d1d5db;
+                background: #f9fafb;
+                page-break-inside: avoid;
+            }
+            code {
+                color: #111827;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="meta-tags">
+                <span class="tag">Mobile & Web</span>
+                <span class="tag">GPS Background</span>
+                <span class="tag budget">Mid Range ($600 - $1.5k)</span>
+            </div>
+            <h1>SafeTracker (GPS Tracking)</h1>
+            <div class="role-text">Lead Mobile & Backend Developer • Case Study</div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="window.print()">Save as Case Study PDF</button>
+                <a href="#" class="btn btn-outline" onclick="alert('Host this file on Vercel or GitHub Pages to link it!')">Generate Web Link</a>
+            </div>
+        </header>
+
+        <section>
+            <h2>1. Executive Summary & Goal</h2>
+            <p>
+                Mobile background tracking systems suffer from aggressive OS battery managers, leading to dropped coordinates. Additionally, privacy-compliant tracking requires strict opt-in indicators.
+            </p>
+            <p>
+                <strong>SafeTracker</strong> is a consent-first GPS tracking framework combining an Android React Native client, an Express backend, and a Leaflet.js real-time browser monitor dashboard. It features robust offline buffering caches and stable hardware tracking identifiers.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. Data Pipeline</h2>
+            <p>
+                GPS coordinates are recorded on the mobile client, queued locally during connection drops, batch uploaded, and broadcasted to browser map dashboards via WebSockets.
+            </p>
+            <div class="diagram-container">
+                <div class="diagram-title">CLIENT TO SERVICE GPS PIPELINE</div>
+                <svg class="diagram-svg" viewBox="0 0 600 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="240" rx="10" fill="#070a13"/>
+                    
+                    <rect x="30" y="90" width="110" height="50" rx="8" fill="#1e1b4b" stroke="#6366f1" stroke-width="2"/>
+                    <text x="85" y="115" fill="white" font-size="11" font-family="Outfit" text-anchor="middle" font-weight="bold">React Native App</text>
+                    <text x="85" y="130" fill="#818cf8" font-size="9" font-family="Outfit" text-anchor="middle">(GPS Fetcher)</text>
+
+                    <rect x="180" y="30" width="90" height="50" rx="8" fill="#0c0a09" stroke="#ea580c" stroke-width="2"/>
+                    <text x="225" y="60" fill="white" font-size="11" font-family="Outfit" text-anchor="middle" font-weight="bold">AsyncStorage</text>
+
+                    <rect x="310" y="90" width="110" height="50" rx="8" fill="#0f172a" stroke="#10b981" stroke-width="2"/>
+                    <text x="365" y="115" fill="white" font-size="11" font-family="Outfit" text-anchor="middle" font-weight="bold">Express Server</text>
+                    <text x="365" y="130" fill="#10b981" font-size="9" font-family="Outfit" text-anchor="middle">Render.com</text>
+
+                    <rect x="460" y="90" width="110" height="50" rx="8" fill="#3b0764" stroke="#a855f7" stroke-width="2"/>
+                    <text x="515" y="115" fill="white" font-size="11" font-family="Outfit" text-anchor="middle" font-weight="bold">Leaflet.js Map</text>
+                    <text x="515" y="130" fill="#a855f7" font-size="9" font-family="Outfit" text-anchor="middle">Monitor UI</text>
+
+                    <!-- Flows -->
+                    <path d="M 85 90 L 85 55 L 180 55" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+                    <path d="M 140 115 L 310 115" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+                    <path d="M 225 80 L 225 115 L 310 115" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow)"/>
+                    <path d="M 420 115 L 460 115" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)"/>
+                    <text x="440" y="105" fill="#a855f7" font-size="8" font-family="Fira Code">WS</text>
+
+                    <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 2 L 8 5 L 0 8 z" fill="#d1d5db"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Technology Stack Breakdown</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>React Native & Expo</strong>
+                    <span>Cross-platform GPS background fetching utilities.</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Leaflet.js Maps</strong>
+                    <span>Interactive map UI canvas displaying custom path coordinates.</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Express & WebSockets</strong>
+                    <span>Node.js server pushing locations directly to client browsers.</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Local storage cache</strong>
+                    <span>Queue logic buffering 2k offline track-points dynamically.</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Key Functional Implementations</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <h3>Consent-First Option Screens</h3>
+                    <p>Enforces active opt-in user confirmations and permanent status bar notification toggles, conforming to store privacy policies.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Battery-Efficient Offline Buffering</h3>
+                    <p>Stores raw locations locally during data gaps and uploads in optimized batch posts when networks restore to save device power.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Stable Device Fingers</h3>
+                    <p>Combines native hardware-linked IDs (`androidId` / `identifierForVendor`) to catalog device coordinates under stable tracks.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. GPS Upload Code Snippet</h2>
+            <p>Below is the Express location ingestion endpoint that accepts coordinate batches and broadcasts updates:</p>
+            <pre><code>// Express endpoint for batch coordinates ingestion
+app.post("/api/location/batch", async (req, res) => {
+    const { deviceId, coordinates } = req.body;
+    if (!deviceId || !Array.isArray(coordinates)) {
+        return res.status(400).json({ error: "Missing parameters" });
+    }
+    
+    // Log target and broadcast coordinates via ws
+    broadcastToMonitors(deviceId, coordinates);
+    
+    // Save to server local file system ledger
+    await saveLocationHistory(deviceId, coordinates);
+    
+    res.status(200).json({ status: "synced", count: coordinates.length });
+});</code></pre>
+        </section>
+    </div>
+</body>
+</html>

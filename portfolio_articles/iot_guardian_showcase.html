@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IoT Guardian Pro - Technical Case Study</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(239, 68, 68, 0.2);
+            --primary: #ef4444;
+            --accent: #a855f7;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            padding: 40px 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(239, 68, 68, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header Styling */
+        header {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .meta-tags {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .tag.budget {
+            background: rgba(168, 85, 247, 0.1);
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            color: #c084fc;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 30%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .role-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Main Sections */
+        section {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+            color: white;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+
+        /* Technical Grid */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .tech-item strong {
+            display: block;
+            color: white;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .tech-item span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Diagram Mock */
+        .diagram-container {
+            background: #080b12;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+
+        /* Features List */
+        .feature-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .feature-card {
+            border-left: 3px solid var(--accent);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .feature-card h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Code Block */
+        pre {
+            background: #05070c;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 20px 0;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #c9d1d9;
+        }
+
+        /* Print Settings (Optimized for PDF exports) */
+        @media print {
+            body {
+                background: white;
+                color: #1f2937;
+                padding: 0;
+            }
+            .container {
+                max-width: 100%;
+            }
+            header, section {
+                background: white;
+                border: 1px solid #e5e7eb;
+                box-shadow: none;
+                page-break-inside: avoid;
+                color: #1f2937;
+            }
+            h1, h2, h3, .tech-item strong, .feature-card h3 {
+                color: #111827 !important;
+            }
+            header::before {
+                background: #ef4444;
+            }
+            p, .tech-item span, .feature-card p, .role-text {
+                color: #4b5563 !important;
+            }
+            .actions {
+                display: none;
+            }
+            .tag {
+                background: #f3f4f6;
+                border-color: #d1d5db;
+                color: #374151;
+            }
+            .diagram-container, pre {
+                border-color: #d1d5db;
+                background: #f9fafb;
+                page-break-inside: avoid;
+            }
+            code {
+                color: #111827;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="meta-tags">
+                <span class="tag">Cyber Simulator</span>
+                <span class="tag">Real-Time Charts</span>
+                <span class="tag budget">Mid Range ($500 - $1.2k)</span>
+            </div>
+            <h1>IoT Guardian Pro</h1>
+            <div class="role-text">Full-Stack Cybersecurity Developer • Case Study</div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="window.print()">Save as Case Study PDF</button>
+                <a href="#" class="btn btn-outline" onclick="alert('Host this file on Vercel or GitHub Pages to link it!')">Generate Web Link</a>
+            </div>
+        </header>
+
+        <section>
+            <h2>1. Executive Summary & Goal</h2>
+            <p>
+                In security training platforms, users need direct visual feedback on active exploits. However, exposing live devices to full attack payloads carries excessive real-world risks.
+            </p>
+            <p>
+                <strong>IoT Guardian Pro</strong> solves this by simulating network attack vectors safely in sandbox loops (representing DDoS flooding, brute-forcing, and phishing intercept nodes) and rendering live network diagnostics tables onto React dashboards via WebSockets.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. System Architecture</h2>
+            <p>
+                The security administrator initializes attacks from a React GUI, triggering python socket loops in the FastAPI backend, which stream metrics back to live graphs and trigger document exports.
+            </p>
+            <div class="diagram-container">
+                <div class="diagram-title">SIMULATOR COMMAND & METRIC PIPELINES</div>
+                <svg class="diagram-svg" viewBox="0 0 600 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="240" rx="10" fill="#070a13"/>
+                    
+                    <rect x="30" y="90" width="100" height="50" rx="8" fill="#1e1b4b" stroke="#6366f1" stroke-width="2"/>
+                    <text x="80" y="120" fill="white" font-size="12" font-family="Outfit" text-anchor="middle" font-weight="bold">Security Admin</text>
+
+                    <rect x="210" y="90" width="100" height="50" rx="8" fill="#7f1d1d" stroke="#ef4444" stroke-width="2"/>
+                    <text x="260" y="115" fill="white" font-size="11" font-family="Outfit" text-anchor="middle" font-weight="bold">FastAPI Core</text>
+                    <text x="260" y="130" fill="#ef4444" font-size="9" font-family="Outfit" text-anchor="middle">(Simulation App)</text>
+
+                    <rect x="390" y="30" width="180" height="70" rx="8" fill="#0c0a09" stroke="#ea580c" stroke-width="2"/>
+                    <text x="480" y="55" fill="white" font-size="11" font-family="Outfit" text-anchor="middle" font-weight="bold">Simulation Worker</text>
+                    <text x="480" y="75" fill="#a855f7" font-size="9" font-family="Fira Code">DDoS / Brute Force</text>
+                    <text x="480" y="90" fill="#ea580c" font-size="9" font-family="Outfit" text-anchor="middle">(Mock Phishing Page)</text>
+
+                    <rect x="390" y="150" width="180" height="50" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="2"/>
+                    <text x="480" y="175" fill="white" font-size="11" font-family="Outfit" text-anchor="middle" font-weight="bold">PDF Report Generator</text>
+                    <text x="480" y="190" fill="#10b981" font-size="9" font-family="Outfit" text-anchor="middle">(Excel Export Layer)</text>
+
+                    <!-- Links -->
+                    <path d="M 130 115 L 210 115" stroke="#6366f1" stroke-width="2" marker-end="url(#arrow)"/>
+                    <path d="M 310 115 L 350 115 L 350 65 L 390 65" stroke="#ef4444" stroke-width="2" marker-end="url(#arrow)"/>
+                    <path d="M 310 115 L 350 115 L 350 175 L 390 175" stroke="#ef4444" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)"/>
+                    <text x="355" y="145" fill="#a855f7" font-size="8" font-family="Fira Code">WS</text>
+
+                    <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 2 L 8 5 L 0 8 z" fill="#d1d5db"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Technology Stack Breakdown</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>FastAPI (Python)</strong>
+                    <span>Core socket event looping and simulator routers.</span>
+                </div>
+                <div class="tech-item">
+                    <strong>React & Chart.js</strong>
+                    <span>Frontend dashboard graphing live incident packet counts.</span>
+                </div>
+                <div class="tech-item">
+                    <strong>WebSocket (ws)</strong>
+                    <span>Real-time pipeline syncing metric ticks to dashboards.</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Report Librarians</strong>
+                    <span>PDF/Excel generator libraries structuring audit statistics.</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Key Functional Implementations</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <h3>Multi-Vector Sim Engine</h3>
+                    <p>Replicates common network security failures, generating fake socket packets and mapping dictionary brute-forcing against static wordlists.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Incident Telemetry Dashboard</h3>
+                    <p>Features interactive dashboard screens logging traffic rates and target system alerts dynamically.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Print-Ready Reporting</h3>
+                    <p>Formats data arrays into audit tables, outputting high-fidelity PDF security documents directly on client download actions.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. Phishing Simulation Code Snippet</h2>
+            <p>Below is the backend mock credentials interceptor that logs entry payloads securely:</p>
+            <pre><code># FastAPI router intercepting simulated phishing entries
+@app.post("/api/phish/intercept")
+async def intercept_phishing_payload(payload: PhishPayload, db: Session = Depends(get_db)):
+    # Record parameters securely in db
+    new_entry = PhishIntercept(
+        target_username=payload.username,
+        source_ip=payload.ip,
+        timestamp=datetime.utcnow()
+    )
+    db.add(new_entry)
+    db.commit()
+    
+    # Broadcast to admin WebSocket dashboard
+    await ws_manager.broadcast_message({
+        "event": "phish_captured",
+        "data": {"username": payload.username, "ip": payload.ip}
+    })
+    return {"status": "captured"}</code></pre>
+        </section>
+    </div>
+</body>
+</html>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BugBounty-AI - Technical Case Study</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(16, 185, 129, 0.2);
+            --primary: #10b981;
+            --accent: #f59e0b;
+            --text-main: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Outfit', sans-serif;
+            line-height: 1.6;
+            padding: 40px 20px;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(245, 158, 11, 0.15) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Header Styling */
+        header {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 40px;
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+        }
+
+        .meta-tags {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            padding: 4px 12px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 600;
+        }
+
+        .tag.budget {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #ffffff 30%, #f59e0b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .role-text {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+        }
+
+        /* Action Buttons */
+        .actions {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            border: none;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: #059669;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-main);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Main Sections */
+        section {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            padding: 32px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 8px;
+            color: white;
+        }
+
+        p {
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-size: 1.05rem;
+        }
+
+        /* Technical Grid */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .tech-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .tech-item strong {
+            display: block;
+            color: white;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .tech-item span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Diagram Mock */
+        .diagram-container {
+            background: #080b12;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 24px;
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .diagram-title {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.8rem;
+            color: var(--primary);
+            margin-bottom: 16px;
+        }
+
+        .diagram-svg {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+        }
+
+        /* Features List */
+        .feature-list {
+            display: grid;
+            gap: 16px;
+        }
+
+        .feature-card {
+            border-left: 3px solid var(--accent);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 16px 20px;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .feature-card h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 6px;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* Code Block */
+        pre {
+            background: #05070c;
+            padding: 20px;
+            border-radius: 12px;
+            overflow-x: auto;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin: 20px 0;
+        }
+
+        code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            color: #c9d1d9;
+        }
+
+        /* Print Settings (Optimized for PDF exports) */
+        @media print {
+            body {
+                background: white;
+                color: #1f2937;
+                padding: 0;
+            }
+            .container {
+                max-width: 100%;
+            }
+            header, section {
+                background: white;
+                border: 1px solid #e5e7eb;
+                box-shadow: none;
+                page-break-inside: avoid;
+                color: #1f2937;
+            }
+            h1, h2, h3, .tech-item strong, .feature-card h3 {
+                color: #111827 !important;
+            }
+            header::before {
+                background: #10b981;
+            }
+            p, .tech-item span, .feature-card p, .role-text {
+                color: #4b5563 !important;
+            }
+            .actions {
+                display: none;
+            }
+            .tag {
+                background: #f3f4f6;
+                border-color: #d1d5db;
+                color: #374151;
+            }
+            .diagram-container, pre {
+                border-color: #d1d5db;
+                background: #f9fafb;
+                page-break-inside: avoid;
+            }
+            code {
+                color: #111827;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="meta-tags">
+                <span class="tag">AI Security Audits</span>
+                <span class="tag">Scrapers & Celery</span>
+                <span class="tag budget">High-Mid Range ($1k - $2.5k)</span>
+            </div>
+            <h1>AI-Assisted Recon (BugBounty-AI)</h1>
+            <div class="role-text">Backend & Automation Engineer • Case Study</div>
+            <div class="actions">
+                <button class="btn btn-primary" onclick="window.print()">Save as Case Study PDF</button>
+                <a href="#" class="btn btn-outline" onclick="alert('Host this file on Vercel or GitHub Pages to link it!')">Generate Web Link</a>
+            </div>
+        </header>
+
+        <section>
+            <h2>1. Executive Summary & Goal</h2>
+            <p>
+                In security research, reconnaissance requires executing multiple slow tools consecutively. Manually sorting through thousands of ports, crawled URLs, and files is a major operational bottleneck.
+            </p>
+            <p>
+                <strong>BugBounty-AI</strong> automated this process by running core tools in asynchronous Celery workers and piping raw findings through LLMs to filter false positives and surface viable exploits.
+            </p>
+        </section>
+
+        <section>
+            <h2>2. System Architecture</h2>
+            <p>
+                A FastAPI endpoint receives target domains, schedules background processes in a Redis-brokered Celery queue, writes findings to PostgreSQL, and calls AI processors to evaluate targets.
+            </p>
+            <div class="diagram-container">
+                <div class="diagram-title">RECON WORKER & AI DATAFLOW</div>
+                <svg class="diagram-svg" viewBox="0 0 600 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="600" height="240" rx="10" fill="#070a13"/>
+                    
+                    <rect x="30" y="90" width="90" height="50" rx="8" fill="#064e3b" stroke="#10b981" stroke-width="2"/>
+                    <text x="75" y="120" fill="white" font-size="12" font-family="Outfit" text-anchor="middle" font-weight="bold">Target Domain</text>
+
+                    <rect x="170" y="90" width="100" height="50" rx="8" fill="#1c1917" stroke="#ea580c" stroke-width="2"/>
+                    <text x="220" y="120" fill="white" font-size="12" font-family="Outfit" text-anchor="middle" font-weight="bold">Celery Worker</text>
+
+                    <!-- Tools nested -->
+                    <rect x="320" y="30" width="100" height="80" rx="8" fill="#0c0a09" stroke="#9a3412" stroke-width="2"/>
+                    <text x="370" y="55" fill="white" font-size="10" font-family="Outfit" text-anchor="middle" font-weight="bold">subfinder</text>
+                    <text x="370" y="75" fill="white" font-size="10" font-family="Outfit" text-anchor="middle" font-weight="bold">httpx / katana</text>
+
+                    <rect x="470" y="90" width="100" height="50" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="2"/>
+                    <text x="520" y="115" fill="white" font-size="11" font-family="Outfit" text-anchor="middle" font-weight="bold">PostgreSQL DB</text>
+                    <text x="520" y="130" fill="#38bdf8" font-size="9" font-family="Outfit" text-anchor="middle">(&amp; AI Triage Log)</text>
+
+                    <!-- Connectors -->
+                    <path d="M 120 115 L 170 115" stroke="#10b981" stroke-width="2" marker-end="url(#arrow)"/>
+                    <path d="M 270 115 L 320 70" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow)"/>
+                    <path d="M 420 70 L 470 115" stroke="#ea580c" stroke-width="2" marker-end="url(#arrow)"/>
+                    <path d="M 220 140 L 220 190 L 470 190 L 520 140" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)"/>
+                    <text x="345" y="185" fill="#f59e0b" font-size="9" font-family="Fira Code">OpenAI/Ollama Query</text>
+
+                    <defs>
+                        <marker id="arrow" viewBox="0 0 10 10" refX="6" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                            <path d="M 0 2 L 8 5 L 0 8 z" fill="#d1d5db"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Technology Stack Breakdown</h2>
+            <div class="tech-grid">
+                <div class="tech-item">
+                    <strong>Celery & Redis</strong>
+                    <span>Job queuing broker for long-running scanner processes.</span>
+                </div>
+                <div class="tech-item">
+                    <strong>Offensive Tooling</strong>
+                    <span>Subfinder (domains), HTTPX (ports), Katana (web crawling).</span>
+                </div>
+                <div class="tech-item">
+                    <strong>OpenAI / Ollama</strong>
+                    <span>LLM APIs to analyze crawled responses for security anomalies.</span>
+                </div>
+                <div class="tech-item">
+                    <strong>FastAPI & Postgres</strong>
+                    <span>Relational ledgers tracking target statuses and audit history.</span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>4. Key Functional Implementations</h2>
+            <div class="feature-list">
+                <div class="feature-card">
+                    <h3>Multi-Stage Scanner Chains</h3>
+                    <p>Enqueues sequential sub-scans: discovering hosts, testing active ports, scraping routes, and mapping code directories automatically.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>LLM Payload Verification</h3>
+                    <p>Extracts HTML header metadata and error payloads. Passes them to an LLM evaluator to spot SQLi, XSS, or directory traversal leaks.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Dockerized Infrastructure</h3>
+                    <p>Designed a compose bundle to handle scanner binary installations, Python library requirements, and task brokers seamlessly.</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>5. Task Orchestration Code Snippet</h2>
+            <p>Below is the Python Celery task blueprint that triggers active binary tool wrappers and logs status changes:</p>
+            <pre><code># Celery worker task executing subfinder binary wrapper
+@shared_task(bind=True)
+def run_subfinder_recon(self, target_id: str, domain: str):
+    self.update_state(state='PROGRESS', meta={'stage': 'Subdomain Scanning'})
+    cmd = ["subfinder", "-d", domain, "-silent", "-json"]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    
+    subdomains = []
+    for line in result.stdout.splitlines():
+        data = json.loads(line)
+        subdomains.append(data.get("host"))
+        
+    db = SessionLocal()
+    save_recon_hosts(db, target_id, subdomains)
+    db.close()
+    return {"hosts_found": len(subdomains)}</code></pre>
+        </section>
+    </div>
+</body>
+</html>
