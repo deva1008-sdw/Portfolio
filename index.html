@@ -8,7 +8,7 @@
     <style>
         /* Color System & Variables */
         :root {
-            /* Cyberpunk Dark Mode (Default) */
+            /* Cyberpunk Dark Theme (Default) */
             --cyan: #00f0ff;
             --magenta: #ff007a;
             --amber: #ffaa00;
@@ -41,7 +41,7 @@
             --font-mono: 'JetBrains Mono', monospace;
         }
 
-        /* Diagnostic Light Mode Override */
+        /* Diagnostic Light Theme Override */
         body.light-theme {
             --bg-base: #f3efe9;       /* Linen/Cream */
             --text-dark: #1c1917;     /* Charcoal */
@@ -94,20 +94,31 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* Cyberpunk Grid Background Overlay */
+        /* 3D Parallax Grid Background Overlay */
         .cyber-grid {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: -5%;
+            left: -5%;
+            width: 110%;
+            height: 110%;
             z-index: 1;
             background-image: 
                 linear-gradient(rgba(0, 240, 255, var(--grid-opacity)) 1px, transparent 1px),
                 linear-gradient(90deg, rgba(0, 240, 255, var(--grid-opacity)) 1px, transparent 1px);
             background-size: 60px 60px;
             pointer-events: none;
-            transition: background-image 0.3s;
+            transition: background-image 0.3s, transform 0.1s ease-out;
+        }
+
+        /* HTML5 Sweep Background Canvas */
+        #radar-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            pointer-events: none;
         }
 
         /* Navigation Header */
@@ -214,7 +225,7 @@
             background: linear-gradient(135deg, var(--cyan), var(--primary));
             color: #06080c !important;
             padding: 12px 24px;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: 700;
             box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
             transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
@@ -311,7 +322,7 @@
             max-width: 600px;
         }
 
-        /* Cyberpunk Terminal Window */
+        /* Cyberpunk Terminal Window (Highly Interactive Shell Console) */
         .terminal {
             background: var(--terminal-body);
             border: 1px solid var(--terminal-border);
@@ -324,7 +335,7 @@
             transition: all 0.3s;
             display: flex;
             flex-direction: column;
-            height: 340px;
+            height: 350px;
             width: 100%;
         }
 
@@ -381,16 +392,33 @@
         .terminal-line span.magenta { color: var(--magenta); }
         .terminal-line span.amber { color: var(--amber); }
 
-        .terminal-action-row {
-            padding: 12px 20px;
-            background: var(--terminal-header);
-            border-top: 1px solid var(--terminal-border);
+        /* Interactive Shell Prompt Line */
+        .terminal-input-line {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 8px;
+            margin-top: auto;
+            border-top: 1px solid rgba(0, 240, 255, 0.08);
+            padding-top: 10px;
         }
 
-        /* Tactical Node Map HUD */
+        .terminal-prompt {
+            color: var(--cyan);
+            font-weight: 700;
+        }
+
+        #terminal-input {
+            background: transparent;
+            border: none;
+            outline: none;
+            color: var(--terminal-text);
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            flex-grow: 1;
+            width: 100%;
+        }
+
+        /* Tactical Node Map HUD Wrapper */
         .hud-wrapper {
             background: var(--card-bg);
             backdrop-filter: blur(25px);
@@ -1033,8 +1061,11 @@
 </head>
 <body>
 
-    <!-- Cyberpunk Grid Overlay -->
-    <div class="cyber-grid"></div>
+    <!-- Parallax Background Grid -->
+    <div class="cyber-grid" id="parallax-grid"></div>
+    
+    <!-- HTML5 Radar Background Canvas -->
+    <canvas id="radar-canvas"></canvas>
     
     <!-- Navigation Header -->
     <nav>
@@ -1066,30 +1097,31 @@
         <section class="hero">
             <div class="hero-left">
                 <div class="hero-badge">
-                    <span></span> DEPLOY_MODE: NEOMAP_CONSOLE
+                    <span></span> DEPLOY_MODE: INTERACTIVE_SHELL
                 </div>
                 <h1>Tactical Development. <br>Secure Networks.</h1>
                 <p class="hero-desc">
-                    We build production-ready full-stack software and analyze target networks from scratch using visual graph architectures. Check our live console diagnostics below.
+                    We build production-ready full-stack software and analyze target networks from scratch using visual graph architectures. Click the terminal console below to run commands.
                 </p>
                 
                 <!-- Cybersecurity Tactical Terminal -->
-                <div class="terminal">
+                <div class="terminal" id="terminal-window">
                     <div class="terminal-header">
                         <div class="terminal-dots">
                             <span class="terminal-dot dot-red"></span>
                             <span class="terminal-dot dot-yellow"></span>
                             <span class="terminal-dot dot-green"></span>
                         </div>
-                        <div class="terminal-title">K3_DIAGNOSTIC_SHELL_v1.0.9</div>
+                        <div class="terminal-title">K3_SHELL_CONSOLE_v1.1</div>
                         <div></div>
                     </div>
                     <div class="terminal-body" id="terminal-screen">
                         <!-- Simulated lines injected via JS -->
                     </div>
-                    <div class="terminal-action-row">
-                        <span style="color: var(--text-muted); font-size: 0.75rem;">Status: Waiting for Command</span>
-                        <button id="scan-trigger" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.75rem; border-radius: 4px; border-color: var(--border);">Run Security Audit</button>
+                    <!-- Fully Interactive Terminal Input Prompter -->
+                    <div class="terminal-input-line">
+                        <span class="terminal-prompt">K3_LABS:// guest$</span>
+                        <input type="text" id="terminal-input" placeholder="Type 'help' and press Enter..." autocomplete="off" spellcheck="false">
                     </div>
                 </div>
             </div>
@@ -1099,7 +1131,7 @@
                 <div class="hud-wrapper">
                     <div class="hud-header">
                         <span>SYS_NERVOUS_SYSTEM_MONITOR</span>
-                        <span style="color: var(--cyan); animation: pulse 1.5s infinite;">● REALTIME</span>
+                        <span style="color: var(--cyan); animation: pulse 1.5s infinite;">● ACTIVE</span>
                     </div>
                     <div class="node-canvas-container">
                         <canvas id="node-canvas"></canvas>
@@ -1334,7 +1366,7 @@
     <div class="console-widget">
         <div class="console-header">
             <span>K3 SYSTEM STATUS</span>
-            <span style="color: var(--cyan);">● ONLINE</span>
+            <span style="color: var(--accent);">● ONLINE</span>
         </div>
         <div class="console-row">
             <span>NETWORK LATENCY</span>
@@ -1404,22 +1436,25 @@
             localStorage.setItem("theme", theme);
         });
 
-        // 2. Cyber Terminal Simulator Engine
+        // 2. 3D Parallax Movement
+        const parallaxGrid = document.getElementById("parallax-grid");
+        window.addEventListener("mousemove", (e) => {
+            const x = (e.clientX - window.innerWidth / 2) / 35;
+            const y = (e.clientY - window.innerHeight / 2) / 35;
+            parallaxGrid.style.transform = `translate(${x}px, ${y}px)`;
+        });
+
+        // 3. Cyber Terminal Interactive Shell Engine
         const terminalScreen = document.getElementById("terminal-screen");
-        const scanTrigger = document.getElementById("scan-trigger");
+        const terminalInput = document.getElementById("terminal-input");
+        const terminalWindow = document.getElementById("terminal-window");
 
         const bootLogs = [
-            "Initializing K3 security shell connection...",
-            "Established secure link to <span class='cyan'>K3_DEVSEC_LABS</span> node list.",
-            "Loading auditing libraries...",
-            "Loading <span class='amber'>CNS (Cyber Nervous System)</span> vulnerability models...",
-            "Running network topology mapping...",
-            "Scan complete: <span class='cyan'>5 projects</span> analyzed. 0 active security breaches found.",
-            "Ready for diagnostic commands."
+            "K3 Labs Diagnostic Shell connection established.",
+            "Type '<span class='cyan'>help</span>' to view all available commands.",
+            "All systems normal."
         ];
 
-        let logQueue = [...bootLogs];
-        
         function appendTerminalLine(text) {
             const line = document.createElement("div");
             line.className = "terminal-line";
@@ -1435,7 +1470,7 @@
                 if (index < bootLogs.length) {
                     appendTerminalLine(bootLogs[index]);
                     index++;
-                    setTimeout(printNext, Math.random() * 400 + 150);
+                    setTimeout(printNext, 200);
                 }
             }
             printNext();
@@ -1443,46 +1478,185 @@
 
         runTerminalBoot();
 
-        // Security scan sequence
-        scanTrigger.addEventListener("click", () => {
-            appendTerminalLine("<span class='amber'>Launching K3 security port scan traceroute...</span>");
-            scanTrigger.disabled = true;
-            
-            setTimeout(() => {
-                appendTerminalLine("Tracing hops to active API gateway nodes...");
-            }, 600);
-            
-            setTimeout(() => {
-                appendTerminalLine("Ping complete: latency <span class='cyan'>1.8ms</span>. Status: <span class='cyan'>SECURE</span>");
-            }, 1200);
-
-            setTimeout(() => {
-                appendTerminalLine("Graph DB analysis: Neo4j clusters synchronized successfully.");
-            }, 1800);
-
-            setTimeout(() => {
-                appendTerminalLine("Audit complete. <span class='cyan'>System standing optimal.</span>");
-                scanTrigger.disabled = false;
-                triggerMapPulsar(); // Triggers a pulse animation on the canvas map!
-            }, 2400);
+        // Terminal Click Focus
+        terminalWindow.addEventListener("click", () => {
+            terminalInput.focus();
         });
 
-        // 3. Interactive HUD Node Canvas Map
-        const canvas = document.getElementById("node-canvas");
-        const ctx = canvas.getContext("2d");
+        // Command handler
+        terminalInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") {
+                const command = terminalInput.value.trim().toLowerCase();
+                terminalInput.value = "";
+                if (command === "") return;
+
+                appendTerminalLine(`<span class='cyan'>guest$ ${command}</span>`);
+
+                setTimeout(() => {
+                    executeCommand(command);
+                }, 100);
+            }
+        });
+
+        function executeCommand(cmd) {
+            switch(cmd) {
+                case 'help':
+                    appendTerminalLine("Available console commands:");
+                    appendTerminalLine("  - <span class='cyan'>scan</span>   : Executes a security traceroute audit.");
+                    appendTerminalLine("  - <span class='cyan'>status</span> : Checks API, Neo4j, and server latency.");
+                    appendTerminalLine("  - <span class='cyan'>cns</span>    : Prints the Cyber Nervous System specs.");
+                    appendTerminalLine("  - <span class='cyan'>clear</span>  : Wipes the console screen.");
+                    break;
+                case 'scan':
+                    appendTerminalLine("<span class='amber'>Launching security traceroute port scan...</span>");
+                    triggerMapPulsar();
+                    setTimeout(() => {
+                        appendTerminalLine("Scanning 5 local nodes... API gateway active.");
+                    }, 500);
+                    setTimeout(() => {
+                        appendTerminalLine("Audit complete. Status: <span class='cyan'>SECURE (0 warnings)</span>");
+                    }, 1200);
+                    break;
+                case 'status':
+                    appendTerminalLine("K3 Server Cluster Status:");
+                    appendTerminalLine("  - Gateway API  : <span class='cyan'>ONLINE</span> (1.4ms)");
+                    appendTerminalLine("  - Graph DB     : <span class='cyan'>SYNCHRONIZED</span> (Neo4j)");
+                    appendTerminalLine("  - Escrow Shield: <span class='cyan'>VERIFIED</span> (Contra Escrow)");
+                    break;
+                case 'cns':
+                    appendTerminalLine("Cyber Nervous System Engine specs:");
+                    appendTerminalLine("  - Engine  : Repository to Graph relational compiler.");
+                    appendTerminalLine("  - Stack   : FastAPI / Neo4j Database / Gemini AI API.");
+                    appendTerminalLine("  - Status  : Integrated (Production-Ready).");
+                    break;
+                case 'clear':
+                    terminalScreen.innerHTML = "";
+                    appendTerminalLine("Terminal console logs wiped. Ready.");
+                    break;
+                default:
+                    appendTerminalLine(`<span class='magenta'>Unknown command: '${cmd}'. Type 'help' for options.</span>`);
+            }
+        }
+
+        // 4. Advanced Sweep Background Radar Canvas
+        const radarCanvas = document.getElementById('radar-canvas');
+        const radarCtx = radarCanvas.getContext('2d');
+
+        let radarWidth = radarCanvas.width = window.innerWidth;
+        let radarHeight = radarCanvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            radarWidth = radarCanvas.width = window.innerWidth;
+            radarHeight = radarCanvas.height = window.innerHeight;
+        });
+
+        const dots = [];
+        const numDots = 40;
+        let sweepAngle = 0;
+
+        class RadarDot {
+            constructor() {
+                this.x = Math.random() * radarWidth;
+                this.y = Math.random() * radarHeight;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+                this.r = Math.random() * 2 + 1;
+                this.intensity = 0.05;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > radarWidth) this.vx *= -1;
+                if (this.y < 0 || this.y > radarHeight) this.vy *= -1;
+                
+                // Slow decay of brightness
+                if (this.intensity > 0.05) this.intensity -= 0.005;
+            }
+
+            draw() {
+                const isLight = document.body.classList.contains("light-theme");
+                radarCtx.beginPath();
+                radarCtx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+                if (isLight) {
+                    radarCtx.fillStyle = `rgba(2, 132, 199, ${this.intensity * 1.5})`;
+                } else {
+                    radarCtx.fillStyle = `rgba(0, 240, 255, ${this.intensity * 2})`;
+                }
+                radarCtx.fill();
+            }
+        }
+
+        for (let i = 0; i < numDots; i++) {
+            dots.push(new RadarDot());
+        }
+
+        function animateRadar() {
+            radarCtx.clearRect(0, 0, radarWidth, radarHeight);
+            const isLight = document.body.classList.contains("light-theme");
+            
+            dots.forEach(dot => {
+                dot.update();
+                dot.draw();
+            });
+
+            // Draw sweeping radar line
+            const centerX = radarWidth * 0.5;
+            const centerY = radarHeight * 0.5;
+            const radius = Math.max(radarWidth, radarHeight);
+
+            sweepAngle += 0.004;
+            const sweepEndX = centerX + Math.cos(sweepAngle) * radius;
+            const sweepEndY = centerY + Math.sin(sweepAngle) * radius;
+
+            // Draw fade sweep trail
+            radarCtx.beginPath();
+            radarCtx.moveTo(centerX, centerY);
+            radarCtx.lineTo(sweepEndX, sweepEndY);
+            if (isLight) {
+                radarCtx.strokeStyle = `rgba(2, 132, 199, 0.035)`;
+            } else {
+                radarCtx.strokeStyle = `rgba(0, 240, 255, 0.05)`;
+            }
+            radarCtx.lineWidth = 2;
+            radarCtx.stroke();
+
+            // Ignite any dot that is close to the sweep line
+            dots.forEach(dot => {
+                const dx = dot.x - centerX;
+                const dy = dot.y - centerY;
+                const dotAngle = Math.atan2(dy, dx);
+                
+                // Check if sweep angle is passing this dot
+                let diff = sweepAngle % (Math.PI * 2) - dotAngle;
+                if (diff < 0) diff += Math.PI * 2;
+
+                if (diff < 0.1) {
+                    dot.intensity = 0.6; // Ignite!
+                }
+            });
+
+            requestAnimationFrame(animateRadar);
+        }
+        animateRadar();
+
+        // 5. Interactive HUD Node Canvas Map
+        const nodeCanvas = document.getElementById("node-canvas");
+        const nodeCtx = nodeCanvas.getContext("2d");
         const hudDetails = document.getElementById("hud-details");
         const hudNodeName = document.getElementById("hud-node-name");
         const hudNodeDesc = document.getElementById("hud-node-desc");
         const hudNodeLoad = document.getElementById("hud-node-load");
         const hudNodeLatency = document.getElementById("hud-node-latency");
 
-        let canvasWidth = canvas.width = canvas.parentElement.clientWidth;
-        let canvasHeight = canvas.height = canvas.parentElement.clientHeight;
+        let canvasWidth = nodeCanvas.width = nodeCanvas.parentElement.clientWidth;
+        let canvasHeight = nodeCanvas.height = nodeCanvas.parentElement.clientHeight;
 
         window.addEventListener("resize", () => {
-            if (canvas.parentElement) {
-                canvasWidth = canvas.width = canvas.parentElement.clientWidth;
-                canvasHeight = canvas.height = canvas.parentElement.clientHeight;
+            if (nodeCanvas.parentElement) {
+                canvasWidth = nodeCanvas.width = nodeCanvas.parentElement.clientWidth;
+                canvasHeight = nodeCanvas.height = nodeCanvas.parentElement.clientHeight;
             }
         });
 
@@ -1513,8 +1687,8 @@
         }
 
         // Mouse hover checker
-        canvas.addEventListener("mousemove", (e) => {
-            const rect = canvas.getBoundingClientRect();
+        nodeCanvas.addEventListener("mousemove", (e) => {
+            const rect = nodeCanvas.getBoundingClientRect();
             const mouseX = e.clientX - rect.left;
             const mouseY = e.clientY - rect.top;
 
@@ -1543,7 +1717,7 @@
         });
 
         function animateNodes() {
-            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            nodeCtx.clearRect(0, 0, canvasWidth, canvasHeight);
             const isLight = document.body.classList.contains("light-theme");
             
             // Core accent colors based on theme
@@ -1559,22 +1733,22 @@
                 const tx = toNode.x * canvasWidth;
                 const ty = toNode.y * canvasHeight;
 
-                ctx.beginPath();
-                ctx.moveTo(fx, fy);
-                ctx.lineTo(tx, ty);
-                ctx.strokeStyle = lineStroke;
-                ctx.lineWidth = 2;
-                ctx.stroke();
+                nodeCtx.beginPath();
+                nodeCtx.moveTo(fx, fy);
+                nodeCtx.lineTo(tx, ty);
+                nodeCtx.strokeStyle = lineStroke;
+                nodeCtx.lineWidth = 2;
+                nodeCtx.stroke();
 
                 // Draw moving electron/pulse along connections
                 const time = (Date.now() / 2500) % 1;
                 const ex = fx + (tx - fx) * time;
                 const ey = fy + (ty - fy) * time;
 
-                ctx.beginPath();
-                ctx.arc(ex, ey, 3, 0, Math.PI * 2);
-                ctx.fillStyle = primaryGlow;
-                ctx.fill();
+                nodeCtx.beginPath();
+                nodeCtx.arc(ex, ey, 3, 0, Math.PI * 2);
+                nodeCtx.fillStyle = primaryGlow;
+                nodeCtx.fill();
             });
 
             // Draw global pulse wave if active
@@ -1582,11 +1756,11 @@
                 mapPulseTime += 0.015;
                 if (mapPulseTime > 2) mapPulseTime = 0;
 
-                ctx.beginPath();
-                ctx.arc(canvasWidth * 0.5, canvasHeight * 0.5, mapPulseTime * 180, 0, Math.PI * 2);
-                ctx.strokeStyle = `rgba(0, 240, 255, ${0.3 * (1 - mapPulseTime/2)})`;
-                ctx.lineWidth = 1.5;
-                ctx.stroke();
+                nodeCtx.beginPath();
+                nodeCtx.arc(canvasWidth * 0.5, canvasHeight * 0.5, mapPulseTime * 180, 0, Math.PI * 2);
+                nodeCtx.strokeStyle = `rgba(0, 240, 255, ${0.3 * (1 - mapPulseTime/2)})`;
+                nodeCtx.lineWidth = 1.5;
+                nodeCtx.stroke();
             }
 
             // Draw nodes
@@ -1596,34 +1770,34 @@
                 const isHovered = hoveredNode === node;
 
                 // Glowing outer aura
-                ctx.beginPath();
-                ctx.arc(px, py, isHovered ? 24 : 14, 0, Math.PI * 2);
-                ctx.fillStyle = isHovered 
+                nodeCtx.beginPath();
+                nodeCtx.arc(px, py, isHovered ? 24 : 14, 0, Math.PI * 2);
+                nodeCtx.fillStyle = isHovered 
                     ? `rgba(0, 240, 255, 0.15)` 
                     : `rgba(0, 240, 255, 0.03)`;
-                ctx.fill();
+                nodeCtx.fill();
 
                 // Core outline
-                ctx.beginPath();
-                ctx.arc(px, py, 9, 0, Math.PI * 2);
-                ctx.strokeStyle = node.color ? node.color : primaryGlow;
-                ctx.lineWidth = 2.5;
-                ctx.fillStyle = isLight ? "#ffffff" : "#060a14";
-                ctx.fill();
-                ctx.stroke();
+                nodeCtx.beginPath();
+                nodeCtx.arc(px, py, 9, 0, Math.PI * 2);
+                nodeCtx.strokeStyle = node.color ? node.color : primaryGlow;
+                nodeCtx.lineWidth = 2.5;
+                nodeCtx.fillStyle = isLight ? "#ffffff" : "#060a14";
+                nodeCtx.fill();
+                nodeCtx.stroke();
 
                 // Small pulsing dot inside core
                 const pulseSize = 3 + Math.abs(Math.sin(Date.now() / 300) * 1.5);
-                ctx.beginPath();
-                ctx.arc(px, py, pulseSize, 0, Math.PI * 2);
-                ctx.fillStyle = node.color ? node.color : primaryGlow;
-                ctx.fill();
+                nodeCtx.beginPath();
+                nodeCtx.arc(px, py, pulseSize, 0, Math.PI * 2);
+                nodeCtx.fillStyle = node.color ? node.color : primaryGlow;
+                nodeCtx.fill();
 
                 // Text Labels above node
-                ctx.font = isHovered ? "bold 10px Orbitron" : "10px Orbitron";
-                ctx.fillStyle = isLight ? "#1c1917" : "#e2e8f0";
-                ctx.textAlign = "center";
-                ctx.fillText(node.name.toUpperCase(), px, py - 20);
+                nodeCtx.font = isHovered ? "bold 10px Orbitron" : "10px Orbitron";
+                nodeCtx.fillStyle = isLight ? "#1c1917" : "#e2e8f0";
+                nodeCtx.textAlign = "center";
+                nodeCtx.fillText(node.name.toUpperCase(), px, py - 20);
             });
 
             requestAnimationFrame(animateNodes);
@@ -1632,7 +1806,7 @@
         // Start node animation loop
         setTimeout(animateNodes, 100);
 
-        // 4. Live System Monitor Widget Fluctuations
+        // 6. Live System Monitor Widget Fluctuations
         const latencyVal = document.getElementById("latency-val");
         const cpuVal = document.getElementById("cpu-val");
 
