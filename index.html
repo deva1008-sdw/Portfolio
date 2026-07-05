@@ -31,6 +31,7 @@
             
             --case-card-hover: rgba(10, 15, 26, 0.95);
             --grid-opacity: 0.015;
+            --logo-shadow: drop-shadow(0 0 8px var(--cyan));
             
             --font-display: 'Orbitron', sans-serif;
             --font-sans: 'Outfit', sans-serif;
@@ -42,20 +43,26 @@
             --bg-base: #f3efe9;       /* Linen/Cream */
             --text-light: #1c1917;    /* Charcoal */
             --text-dark: #1c1917;
-            --text-muted: #6b7280;
-            --card-bg: rgba(255, 255, 255, 0.45);
-            --border: rgba(28, 25, 23, 0.08);
-            --border-glow: rgba(29, 78, 216, 0.25);
-            --nav-bg: rgba(243, 239, 233, 0.85);
+            --text-muted: #4b5563;    /* Saturated slate gray for readability */
+            --card-bg: rgba(255, 255, 255, 0.6); /* More solid glass card */
+            --border: rgba(28, 25, 23, 0.1);    /* High-contrast border */
+            --border-glow: rgba(29, 78, 216, 0.35);
+            --nav-bg: rgba(243, 239, 233, 0.9);
             
             --btn-primary-bg: #1c1917;
             --btn-primary-text: #ffffff;
             --btn-outline-border: #1c1917;
             --btn-outline-text: #1c1917;
-            --btn-outline-hover: rgba(28, 25, 23, 0.04);
+            --btn-outline-hover: rgba(28, 25, 23, 0.05);
             
             --case-card-hover: #ffffff;
-            --grid-opacity: 0.03;
+            --grid-opacity: 0.04;
+            --logo-shadow: drop-shadow(0 2px 4px rgba(28, 25, 23, 0.12));
+            
+            /* Saturated Contrast-Safe logo colors for light mode text */
+            --cyan: #0284c7;          /* Rich Ocean Blue */
+            --magenta: #be185d;       /* Deep Saturated Magenta */
+            --primary: #1d4ed8;       /* Deep Royal Blue */
         }
 
         * {
@@ -148,7 +155,12 @@
             width: 36px;
             height: 36px;
             object-fit: contain;
-            filter: drop-shadow(0 0 6px var(--cyan));
+            filter: var(--logo-shadow);
+            transition: filter 0.3s, transform 0.3s;
+        }
+
+        .brand-logo:hover img {
+            transform: rotate(15deg) scale(1.05);
         }
 
         .nav-actions-wrapper {
@@ -252,6 +264,7 @@
             text-transform: uppercase;
             font-family: var(--font-display);
             margin-bottom: 32px;
+            transition: color 0.3s, background-color 0.3s, border-color 0.3s;
         }
 
         .hero-badge span {
@@ -261,6 +274,7 @@
             border-radius: 50%;
             box-shadow: 0 0 8px var(--cyan);
             animation: pulse 1.5s infinite;
+            transition: background-color 0.3s;
         }
 
         @keyframes pulse {
@@ -285,6 +299,7 @@
         .hero h1 span.scramble {
             font-family: var(--font-mono);
             color: var(--cyan);
+            transition: color 0.3s;
         }
 
         .hero-desc {
@@ -293,6 +308,7 @@
             line-height: 1.8;
             margin-bottom: 48px;
             max-width: 680px;
+            transition: color 0.3s;
         }
 
         .hero-actions {
@@ -369,6 +385,7 @@
             display: block;
             margin-bottom: 16px;
             text-shadow: 0 0 8px rgba(0, 240, 255, 0.15);
+            transition: color 0.3s;
         }
 
         .section-header h2 {
@@ -384,6 +401,7 @@
         .section-header p {
             font-size: 1.15rem;
             color: var(--text-muted);
+            transition: color 0.3s;
         }
 
         /* Services Grid (Store) */
@@ -426,7 +444,7 @@
         .service-img-container img {
             width: 100%;
             height: 100%;
-            object-fit: contain; /* Set to contain to prevent cropping service covers */
+            object-fit: contain;
             transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
@@ -463,6 +481,7 @@
             font-weight: 700;
             color: var(--cyan);
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+            transition: color 0.3s;
         }
 
         .service-desc {
@@ -471,6 +490,7 @@
             line-height: 1.7;
             margin-bottom: 32px;
             flex-grow: 1;
+            transition: color 0.3s;
         }
 
         .service-deliverables {
@@ -495,6 +515,7 @@
             color: var(--cyan);
             font-family: var(--font-mono);
             font-weight: 700;
+            transition: color 0.3s;
         }
 
         /* Products Section (Framer Shop) */
@@ -561,6 +582,7 @@
             margin-bottom: 24px;
             align-self: flex-start;
             font-family: var(--font-display);
+            transition: color 0.3s, background-color 0.3s, border-color 0.3s;
         }
 
         .product-details h3 {
@@ -578,6 +600,7 @@
             font-size: 1rem;
             line-height: 1.75;
             margin-bottom: 36px;
+            transition: color 0.3s;
         }
 
         .product-purchase {
@@ -606,6 +629,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            transition: color 0.3s;
         }
 
         /* Case Studies Section */
@@ -650,6 +674,7 @@
             font-size: 0.75rem;
             color: var(--cyan);
             font-weight: 600;
+            transition: color 0.3s, background-color 0.3s, border-color 0.3s;
         }
 
         .case-card h4 {
@@ -667,6 +692,7 @@
             line-height: 1.65;
             margin-bottom: 32px;
             flex-grow: 1;
+            transition: color 0.3s;
         }
 
         /* Buttons styling */
@@ -694,6 +720,7 @@
         .btn-primary {
             background: var(--btn-primary-bg);
             color: var(--btn-primary-text);
+            transition: background-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
         }
 
         .btn-primary:hover {
@@ -707,6 +734,7 @@
             background: transparent;
             color: var(--btn-outline-text);
             border: 1.5px solid var(--btn-outline-border);
+            transition: border-color 0.3s, color 0.3s, transform 0.3s, box-shadow 0.3s;
         }
 
         .btn-outline:hover {
@@ -747,7 +775,7 @@
             flex-direction: column;
             gap: 8px;
             pointer-events: all;
-            transition: border-color 0.3s;
+            transition: border-color 0.3s, background-color 0.3s;
         }
 
         .console-widget:hover {
@@ -762,6 +790,7 @@
             padding-bottom: 6px;
             font-weight: 700;
             color: var(--cyan);
+            transition: color 0.3s;
         }
 
         .console-row {
@@ -772,6 +801,7 @@
 
         .console-val {
             color: var(--cyan);
+            transition: color 0.3s;
         }
 
         /* Booking Section */
@@ -788,17 +818,7 @@
             box-shadow: 0 0 50px rgba(0, 240, 255, 0.03);
             position: relative;
             overflow: hidden;
-        }
-
-        .booking-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(0, 240, 255, 0.08) 0%, transparent 60%);
-            pointer-events: none;
+            transition: border-color 0.3s;
         }
 
         .booking-card h2 {
@@ -829,6 +849,7 @@
             padding: 80px 20px;
             font-size: 0.95rem;
             border-top: 1px solid rgba(0, 240, 255, 0.05);
+            transition: background-color 0.3s;
         }
 
         footer p {
@@ -1273,9 +1294,9 @@
                 
                 // Color matches light/dark theme
                 if (document.body.classList.contains("light-theme")) {
-                    ctx.fillStyle = 'rgba(15, 118, 110, 0.35)'; // Teal particles
+                    ctx.fillStyle = 'rgba(2, 132, 199, 0.4)';  // Logo blue particles in light mode
                 } else {
-                    ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';  // Cyan particles
+                    ctx.fillStyle = 'rgba(0, 240, 255, 0.4)';   // Cyan particles in dark mode
                 }
                 ctx.fill();
             }
@@ -1309,9 +1330,9 @@
                         ctx.lineTo(p2.x, p2.y);
                         
                         if (isLight) {
-                            ctx.strokeStyle = `rgba(15, 118, 110, ${0.12 * (1 - dist / maxDist)})`; // Light theme lines
+                            ctx.strokeStyle = `rgba(2, 132, 199, ${0.15 * (1 - dist / maxDist)})`; // Logo blue lines
                         } else {
-                            ctx.strokeStyle = `rgba(0, 240, 255, ${0.15 * (1 - dist / maxDist)})`; // Dark theme lines
+                            ctx.strokeStyle = `rgba(0, 240, 255, ${0.15 * (1 - dist / maxDist)})`; // Cyan lines
                         }
                         ctx.lineWidth = 1;
                         ctx.stroke();
