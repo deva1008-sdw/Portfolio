@@ -1731,6 +1731,13 @@
 
             // Scatter physical 3D stones on the ground
             const rocksGroup = new THREE.Group();
+            const rockMat = new THREE.MeshStandardMaterial({
+                map: textures.map,
+                bumpMap: textures.bumpMap,
+                bumpScale: 0.1,
+                roughness: 0.9,
+                metalness: 0.08
+            });
             for (let i = 0; i < 35; i++) {
                 const rGeo = new THREE.DodecahedronGeometry(Math.random() * 0.25 + 0.15, 1);
                 // Displace stone vertices to look rough/volumetric
@@ -1742,14 +1749,7 @@
                 }
                 rGeo.computeVertexNormals();
 
-                const rMat = new THREE.MeshStandardMaterial({
-                    map: textures.map,
-                    bumpMap: textures.bumpMap,
-                    bumpScale: 0.1,
-                    roughness: 0.9,
-                    metalness: 0.08
-                });
-                const rMesh = new THREE.Mesh(rGeo, rMat);
+                const rMesh = new THREE.Mesh(rGeo, rockMat);
                 const rx = (Math.random() - 0.5) * 16;
                 const rz = (Math.random() - 0.5) * 16;
                 const ry = -3 + Math.sin(rx * 0.2) * Math.cos(rz * 0.2) * 0.45;
@@ -1838,7 +1838,16 @@
             const fRocksGroup = new THREE.Group();
             window.debrisRocks = [];
             for (let i = 0; i < 20; i++) {
-                const rock = new THREE.Mesh(rGeo = new THREE.DodecahedronGeometry(0.3, 1), rMat);
+                const rockGeo = new THREE.DodecahedronGeometry(0.3, 1);
+                const rPos = rockGeo.attributes.position;
+                for (let k = 0; k < rPos.count; k++) {
+                    rPos.setX(k, rPos.getX(k) + (Math.random() - 0.5) * 0.05);
+                    rPos.setY(k, rPos.getY(k) + (Math.random() - 0.5) * 0.05);
+                    rPos.setZ(k, rPos.getZ(k) + (Math.random() - 0.5) * 0.05);
+                }
+                rockGeo.computeVertexNormals();
+
+                const rock = new THREE.Mesh(rockGeo, rockMat);
                 const angle = Math.random() * Math.PI * 2;
                 const r = Math.random() * 8 + 4;
                 const y = Math.random() * 8 - 1;
